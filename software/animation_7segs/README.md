@@ -72,5 +72,6 @@ A simulação foi realizada no ModelSim com testes (`tb_animation_segs.vhd`), qu
 
 
 ## Implementação em softcore
-
+Foi feita a implementação do projeto em softcore. 
+O arquivo bus, que é o documento que faz a interligaçã
 
