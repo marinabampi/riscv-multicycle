@@ -70,3 +70,7 @@ A simulação foi realizada no ModelSim com testes (`tb_animation_segs.vhd`), qu
 ![GIF da animação](media/animation_gif.gif)
 
 
+
+## Implementação em softcore
+
+
