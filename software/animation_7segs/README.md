@@ -71,7 +71,33 @@ A simulação foi realizada no ModelSim com testes (`tb_animation_segs.vhd`), qu
 
 
 
-## Implementação em softcore
-Foi feita a implementação do projeto em softcore. 
-O arquivo bus, que é o documento que faz a interligaçã
+## Continuação – Integração de hardware e barramento
+
+Para permitir que a animação do display de 7 segmentos seja controlada pelo processador, foi desenvolvido um periférico de hardware mapeado em memória.
+
+Inicialmente, foi criado o módulo 'animation_segs.vhd', responsável apenas pela lógica da animação, incluindo controle de velocidade, direção e geração dos sinais para o display de 7 segmentos. Esse módulo funciona de forma independente do processador.
+
+Em seguida, foi implementado o módulo 'animation_bus.vhd', que realiza a interface entre o hardware da animação e o barramento de dados do softcore RISC-V. Esse módulo segue o mesmo padrão dos demais periféricos do projeto e permite que o processador configure a animação por meio de registradores internos.
+
+Os registradores implementados utilizam endereçamento por palavra e possuem as seguintes funções:
+
+- Endereço base ('MY_WORD_ADRESS`): habilita ou reseta a animação.
+- Endereço base + 1: define a direção da animação.
+- Endereço base + 2: seleciona a velocidade da animação.
+
+Para integrar o novo periférico ao sistema, o arquivo 'iodatabusmux.vhd' foi modificado, adicionando o mapeamento do periférico de animação no espaço de E/S. Dessa forma, o processador consegue acessar corretamente o novo dispositivo por meio do barramento.
+
+A integração foi validada por meio de simulação em VHDL no ModelSim, utilizando o testbench original do projeto.
+
+A geração e execução de um arquivo '.hex' contendo código em C para controle da animação, não foi implementado corretamento, de forma que o projeto foi a correta integração ao barramento do softcore.
+
+
+Durante o desenvolvimento, foi necessário compreender e adaptar a arquitetura de barramento do projeto base. Em especial, foi realizada a análise do funcionamento do 'iodatabusmux.vhd' , responsável por selecionar qual periférico responde às leituras do processador com base no endereço acessado.
+
+Para isso, foi adicionado um novo sinal de retorno de dados ('ddata_r_animation')  e o respectivo mapeamento de endereço, garantindo que o periférico de animação pudesse coexistir com os demais dispositivos já presentes no sistema, sem conflito de endereços.
+
+Além disso, o testbench original do projeto foi ajustado para incluir a instância do novo periférico, mantendo todos os periféricos existentes e o funcionamento completo do softcore. 
+
+A simulação permitiu validar não apenas o funcionamento isolado do hardware da animação, mas também sua integração correta ao barramento de dados do processador, confirmando que o periférico responde ao endereço configurado e interage corretamente com a arquitetura do sistema.
+
 
